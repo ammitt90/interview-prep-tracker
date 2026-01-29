@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from flask import Flask, request, jsonify, url_for
+from flask import Flask, request, jsonify, url_for, send_from_directory, render_template
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.exc import SQLAlchemyError
 
@@ -76,6 +76,31 @@ def get_problems():
 
     except SQLAlchemyError as e:
         return handle_db_errors(e)
+
+@app.route("/")
+def index():
+    return render_template("index.html")
+
+
+@app.route("/ui.js")
+def serve_ui_js():
+    return send_from_directory(app.root_path, "ui.js")
+
+
+@app.route("/problems/<int:id>", methods=["GET"])
+def get_problem_by_id_route(id):
+    return get_problem_by_id(id)
+
+
+@app.route("/problems/<int:id>", methods=["DELETE"])
+def delete_problem_route(id):
+    return delete_problem(id)
+
+
+@app.route("/problems", methods=["POST"])
+def add_problem_route():
+    return add_problem()
+
 
 @app.route('/problems/problemid/<int:id>', methods=['GET'])
 def get_problem_by_id(id):
@@ -218,4 +243,4 @@ def update_problem_status(id):
         return handle_db_errors(e)
 
 if __name__ == '__main__':
-    app.run(debug=True,port=5000)
+    app.run(debug=True, port=5001)

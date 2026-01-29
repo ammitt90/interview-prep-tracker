@@ -74,7 +74,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (deadline) {
       const date = new Date(deadline);
-      formattedDeadline = `${date.getMonth() + 1}-${date.getDate()}-${date.getFullYear()}`;
+      const y = date.getFullYear();
+      const m = String(date.getMonth() + 1).padStart(2, "0");
+      const d = String(date.getDate()).padStart(2, "0");
+      formattedDeadline = `${y}-${m}-${d}`;
     }
 
     const newProblem = {
